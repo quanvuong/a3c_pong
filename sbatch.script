@@ -4,7 +4,7 @@
 
 #SBATCH --time=5:00:00
 #SBATCH --cpus-per-task=16
-#SBATCH --mem=200000mb
+#SBATCH --mem=50000mb
 #SBATCH --mail-type=END,FAIL,REQUEUE,STAGE_OUT
 #SBATCH --mail-user=qhv200@nyu.edu
 #SBATCH --partition=aquila
