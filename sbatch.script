@@ -10,7 +10,7 @@
 #SBATCH --partition=aquila
 #SBATCH --constraint=2680v4
 
-source activate /gpfsnyu/scratch/qhv200/conda_envs/pytorch2_gpu_py36
+source activate /gpfsnyu/scratch/qhv200/conda_envs/pytorch2_cpu_py36_oct_9
 cd /gpfsnyu/scratch/qhv200/a3c_pong
 
 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python main.py
