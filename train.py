@@ -1,0 +1,111 @@
+import random
+from itertools import count
+import sys
+
+import numpy as np
+import torch
+import torch.nn.functional as F
+import gym
+
+from constructors import build_policy_net, build_value_net
+from wrappers import FloatTensorFromNumpyVar, FloatTensorVar, ZeroTensorVar
+from utils import run_episode, run_value_net
+
+
+def ensure_share_grads(global_net, local_net):
+    for param, shared_param in zip(local_net.parameters(), global_net.parameters()):
+        if shared_param.grad is not None:
+            return
+        shared_param._grad = param.grad
+
+
+def train_value_net(value_net, shared_value_net, shared_value_optim, episode):
+
+    # Calculate return from the first visit to each state
+    visited_states = set()
+    states, returns = [], []
+    for t in range(len(episode)):
+        s, G = episode[t].state, episode[t].G
+        str_s = s.astype(int).tostring()  # Fastest hashable state representation
+        if str_s not in visited_states:
+            visited_states.add(str_s)
+            states.append(s)
+
+            # Monte-Carlo return
+            returns.append(G)
+
+    states = FloatTensorFromNumpyVar(np.array(states))
+    returns = FloatTensorVar([returns])
+
+    # Train the value network on states, returns
+    shared_value_optim.zero_grad()
+
+    loss = F.l1_loss(value_net(states), returns)
+    loss.backward()
+
+    # Turn NaN to 0
+    for w in value_net.parameters():
+        w.grad.data[w.grad.data != w.grad.data] = 0
+
+    ensure_share_grads(shared_value_net, value_net)
+    shared_value_optim.step()
+
+
+def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode, value_net, args):
+
+    # Compute baselines
+    baselines = [run_value_net(value_net, step.state) for step in episode]
+    baselines = FloatTensorVar(baselines)
+
+    # Calculate sum of log probability of action and episode entropy
+    sum_log_probs = ZeroTensorVar(len(episode))
+    entropy = ZeroTensorVar(1)
+    for step in episode:
+        sum_log_probs = sum_log_probs + step.act_prob
+        entropy = entropy + step.entropy
+
+    returns = FloatTensorVar([step.G for step in episode])
+
+    neg_perf = (sum_log_probs * (baselines - returns)).sum() - args.entropy_weight * entropy
+    neg_perf.backward()
+
+    # Turn NaNs to 0
+    for w in policy_net.parameters():
+        w.grad.data[w.grad.data != w.grad.data] = 0
+
+    ensure_share_grads(shared_policy_net, policy_net)
+    shared_policy_optim.step()
+
+
+def train(shared_policy_net, shared_policy_optim,
+          shared_value_net, shared_value_optim, process_i, args):
+
+    # Create env
+    env = gym.make(args.env_name)
+
+    # Each training process is init with a different seeds
+    random.seed(process_i)
+    np.random.seed(process_i)
+    torch.manual_seed(process_i)
+    env.seed(process_i)
+
+    # create local policy and value net and sync params
+    policy_net = build_policy_net(shared_policy_net.layers)
+    policy_net.load_state_dict(shared_policy_net.state_dict())
+
+    value_net = build_value_net(shared_value_net.layers)
+    value_net.load_state_dict(shared_value_net.state_dict())
+
+    for episode_i in count():
+        policy_net.load_state_dict(shared_policy_net.state_dict())
+        episode = run_episode(policy_net, env, args)
+
+        if process_i == 0:
+            print(f'process: {process_i}, episode: {episode_i}, episode length: {len(episode)}, G: {episode[0].G}')
+            sys.stdout.flush()
+
+        train_value_net(value_net, shared_value_net, shared_value_optim, episode)
+        value_net.load_state_dict(shared_value_net.state_dict())
+
+        train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode, value_net, args)
+        policy_net.load_state_dict(shared_policy_net.state_dict())
