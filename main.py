@@ -75,6 +75,7 @@ if __name__ == '__main__':
     args.cpu_count = cpu_count
 
     print(f'Using {args.cpu_count} number of cores')
+    sys.stdout.flush()
 
     main(args)
 
