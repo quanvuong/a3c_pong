@@ -16,6 +16,15 @@ def np_to_torch_state(state):
 
 
 def run_episode(policy_net, env, args):
+    """
+    Run the policy net in the environment for one episode.
+    Calculate the discounted value of each states visited.
+    Cache the value of the entropy bonus.
+
+    :param env: an environment conforming to openAI gym interface
+    :param args: an object which holds all hyperparam settings
+    :return: a list of EpisodeStep
+    """
 
     episode = []
     state = env.reset()
