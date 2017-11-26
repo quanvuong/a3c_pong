@@ -7,13 +7,11 @@ import torch
 
 def build_value_net(layers):
     """
-    Args:
-        layers: should be a list of size 3
+    :param layers: a list of size 3
         with index 0, 1, 2 specifying the input size, hidden layer size and output size respectively.
-
-    Returns:
-        A FFN with 2 hidden layers and RELU non-linearity.
-        The returned object has attribute layers, which is the same as the input layers to this function."""
+    :return: A FFN with 2 hidden layers and RELU non-linearity.
+        The returned object has attribute layers, which is the same as the input layers to this function.
+    """
 
     value_net = torch.nn.Sequential(
                   torch.nn.Linear(layers[0], layers[1]),
@@ -28,14 +26,11 @@ def build_value_net(layers):
 
 def build_policy_net(layers):
     """
-    Args:
-        layers: should be a list of size 3
+    :param layers: a list of size 3
         with index 0, 1, 2 specifying the input size, hidden layer size and output size respectively.
-
-    Return:
-        a torch.nn.Module which implements a FFN with 1 hidden layer and RELU non-linearity followed by softmax.
+    :return: a torch.nn.Module which implements a FFN with 1 hidden layer and RELU non-linearity followed by softmax.
         The returned object has attribute layers, which is the same as the input layers to this function.
-        """
+    """
 
     class PolicyNet(torch.nn.Module):
         def __init__(self, layers):
