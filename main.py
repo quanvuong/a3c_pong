@@ -22,9 +22,6 @@ def start_training_processes(args, shared_policy_net, shared_policy_optim,
     """
 
     processes = []
-    #
-    # train(shared_policy_net, shared_policy_optim,
-    #       shared_value_net, shared_value_optim, 0, args)
 
     for process_i in range(args.cpu_count):
         arguments = (shared_policy_net, shared_policy_optim,
