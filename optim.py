@@ -1,3 +1,7 @@
+"""
+Implement RMSProp with shared statistics among all the training processes
+"""
+
 import torch
 from torch.optim import RMSprop
 
