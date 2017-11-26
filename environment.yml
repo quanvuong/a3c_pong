@@ -84,5 +84,4 @@ dependencies:
   - requests==2.18.4
   - torch==0.2.0.post4
   - urllib3==1.22
-prefix: !!python/unicode '/Users/QV/miniconda2/envs/pytorch2_cpu_py36'
 
