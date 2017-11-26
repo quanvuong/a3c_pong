@@ -1,5 +1,7 @@
 # a3c pong
 
+The main file entry is `main.py`.
+
 Run the following commands to run the code (Tested on macOS High Sierra Version 10.13.1):
 
 ```
