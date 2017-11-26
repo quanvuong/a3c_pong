@@ -31,4 +31,4 @@ rm -rf ~/miniconda3
 rm -rf a3c_pong_main_dir
 ```
 
-Alternatively, `sbatch.script` is the SLURM job submission script. SLURM is a job scheduler for High-performance computing cluster. I have written a short guide on SLURM [here](https://github.com/quanvuong/deep_learning_tips_and_tricks#slurm).
+Alternatively, `sbatch.script` is the SLURM job submission script. SLURM is a job scheduler for High Performance Computing cluster. I have written a short guide on SLURM [here](https://github.com/quanvuong/deep_learning_tips_and_tricks#slurm).
