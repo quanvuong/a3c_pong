@@ -17,7 +17,7 @@ cd a3c_pong
 conda create --file environment.yml --prefix pytorch2_cpu_py36
 source activate pytorch2_cpu_py36
 
-4. Install openAI gym
+4. Install openAI gym ATARI environment
 git clone git@github.com:openai/gym.git
 cd gym
 pip install -e '.[atari]'
