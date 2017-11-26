@@ -1,3 +1,9 @@
+"""
+Implements two main functions:
+    main: build the policy and value networks and start the a3c training process
+    start_training_processes: start training processes and wait for them to finish
+"""
+
 import argparse
 import os
 import sys
@@ -11,6 +17,9 @@ import torch.multiprocessing as mp
 
 def start_training_processes(args, shared_policy_net, shared_policy_optim,
                              shared_value_net, shared_value_optim):
+    """
+    :param args: an object which holds all hyperparam values
+    """
 
     processes = []
     #
@@ -36,6 +45,12 @@ def start_training_processes(args, shared_policy_net, shared_policy_optim,
 
 
 def main(args):
+    """
+    Build the policy and value network, whose parameters are moved to shared memory, and their optimizers.
+    Start the a3c training processes.
+
+    :param args: an object which holds all hyperparam values
+    """
 
     # state size, hidden layer size, output size
     policy_net_layers = [128, 256, 6]
