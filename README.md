@@ -11,11 +11,19 @@ cd a3c_pong_main_dir
 wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
 sudo bash Miniconda3-latest-MacOSX-x86_64.sh
 
-3. Clone this repo, install dependencies and run!
+3. Clone this repo, install dependencies from conda environment.yml file
 git clone git@github.com:quanvuong/a3c_pong.git
 cd a3c_pong
 conda create --file environment.yml --prefix pytorch2_cpu_py36
 source activate pytorch2_cpu_py36
+
+4. Install openAI gym
+git clone git@github.com:openai/gym.git
+cd gym
+pip install -e '.[atari]'
+
+5. Run
+cd to a3c_pong folder path
 python main.py
 
 4. Afterwards, to undo the previous step:
