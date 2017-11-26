@@ -1,3 +1,7 @@
+"""
+Wrappers for common pytorch tensors and variables.
+"""
+
 import torch
 from torch.autograd import Variable
 
