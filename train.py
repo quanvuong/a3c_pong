@@ -84,6 +84,8 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
 
     returns = FloatTensorVar([step.G for step in episode])
 
+    # Call backward pass and update param
+    shared_policy_optim.zero_grad()
     neg_perf = (sum_log_probs * (baselines - returns)).sum() - args.entropy_weight * entropy
     neg_perf.backward()
 
