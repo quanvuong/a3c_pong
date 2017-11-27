@@ -33,7 +33,7 @@ python main.py
 
 4. Afterwards, to undo the previous step:
 source deactivate # Deactivate conda environment
-sudo rm -rf ~/miniconda3
+sudo rm -rf ~/miniconda3 # Be sure you want to remove your existing conda installation
 sudo rm -rf a3c_pong_main_dir
 Remove the Miniconda3 install location from PATH in your .bash_profile
 ```
