@@ -14,7 +14,7 @@ curl -o Miniconda3-latest-MacOSX-x86_64.sh 'https://repo.continuum.io/miniconda/
 sudo bash Miniconda3-latest-MacOSX-x86_64.sh
 Follow the instructions and accept the default options
 
-3. Clone this repo, install dependencies from conda environment.yml file
+3. Clone this repo, install dependencies
 git clone https://github.com/quanvuong/a3c_pong.git
 cd a3c_pong
 sudo conda create --prefix pytorch2_cpu_py36 python=3.6 pytorch=0.2.0 -c soumith
