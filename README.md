@@ -1,4 +1,4 @@
-# a3c pong
+# a3c to play pong
 
 The main file entry is `main.py`.
 
