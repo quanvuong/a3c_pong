@@ -38,4 +38,4 @@ sudo rm -rf a3c_pong_main_dir
 Remove the Miniconda3 install location from PATH in your .bash_profile
 ```
 
-Alternatively, `sbatch.script` is the SLURM job submission script. SLURM is a job scheduler for High Performance Computing cluster. I have written a short guide on SLURM [here](https://github.com/quanvuong/deep_learning_tips_and_tricks#slurm).
+Alternatively, `sbatch.script` is the SLURM job submission script. SLURM is a job scheduler for High Performance Computing cluster. I have written a short beginners-friendly guide on SLURM [here](https://github.com/quanvuong/deep_learning_tips_and_tricks#slurm).
