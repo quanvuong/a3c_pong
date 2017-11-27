@@ -10,8 +10,9 @@ mkdir a3c_pong_main_dir
 cd a3c_pong_main_dir
 
 2. Install Miniconda
-wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+curl -o Miniconda3-latest-MacOSX-x86_64.sh 'https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh'
 sudo bash Miniconda3-latest-MacOSX-x86_64.sh
+Follow the instructions and accept the default options
 
 3. Clone this repo, install dependencies from conda environment.yml file
 git clone git@github.com:quanvuong/a3c_pong.git
