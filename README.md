@@ -17,8 +17,9 @@ Follow the instructions and accept the default options
 3. Clone this repo, install dependencies from conda environment.yml file
 git clone https://github.com/quanvuong/a3c_pong.git
 cd a3c_pong
-conda create --file environment.yml --prefix pytorch2_cpu_py36
+sudo conda create --prefix pytorch2_cpu_py36 python=3.6 pytorch=0.2.0 -c soumith
 source activate pytorch2_cpu_py36
+sudo pip install namedlist==1.7
 
 4. Install openAI gym ATARI environment
 git clone https://github.com/openai/gym.git
