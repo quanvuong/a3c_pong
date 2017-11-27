@@ -15,13 +15,13 @@ sudo bash Miniconda3-latest-MacOSX-x86_64.sh
 Follow the instructions and accept the default options
 
 3. Clone this repo, install dependencies from conda environment.yml file
-git clone git@github.com:quanvuong/a3c_pong.git
+git clone https://github.com/quanvuong/a3c_pong.git
 cd a3c_pong
 conda create --file environment.yml --prefix pytorch2_cpu_py36
 source activate pytorch2_cpu_py36
 
 4. Install openAI gym ATARI environment
-git clone git@github.com:openai/gym.git
+git clone https://github.com/openai/gym.git
 cd gym
 pip install -e '.[atari]'
 
