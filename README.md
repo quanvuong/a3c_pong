@@ -2,7 +2,7 @@
 
 The main file entry is `main.py`.
 
-Run the following commands to run the code (Tested on macOS High Sierra Version 10.13.1):
+Run the following commands to run the code (Tested on factory installation of macOS Sierra Version 10.12.6 MacBook Air 13-inch, Mid 2013):
 
 ```
 1. Create a dedicated folder
