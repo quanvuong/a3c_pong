@@ -83,7 +83,7 @@ if __name__ == '__main__':
         cpu_count = int(os.environ['SLURM_CPUS_PER_TASK'])
     except KeyError:
         # cpu_count = os.cpu_count()
-        cpu_count = 1
+        cpu_count = 2
     args.cpu_count = cpu_count
 
     print(f'Using {args.cpu_count} cores')
