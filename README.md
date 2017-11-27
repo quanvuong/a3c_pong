@@ -24,7 +24,8 @@ sudo pip install namedlist==1.7
 4. Install openAI gym ATARI environment
 git clone https://github.com/openai/gym.git
 cd gym
-pip install -e '.[atari]'
+git checkout 0eccce8146d011f7691f4aff5766be7c5a4d8cbd
+sudo pip install -e '.[atari]'
 
 5. Run
 cd to a3c_pong folder path
