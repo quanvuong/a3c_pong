@@ -43,7 +43,7 @@ class SharedRMSProp(RMSprop):
                 # Incre step counter
                 state['step'] += 1
 
-                # Receive necessary info
+                # Retrieve necessary info
                 grad = param.grad.data
                 square_avg = state['square_avg']
                 alpha = group['alpha']
