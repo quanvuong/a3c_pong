@@ -9,7 +9,7 @@ def build_value_net(layers):
     """
     :param layers: a list of size 3
         with index 0, 1, 2 specifying the input size, hidden layer size and output size respectively.
-    :return: A FFN with 2 hidden layers and RELU non-linearity.
+    :return: a FFN with 2 hidden layers and RELU non-linearity.
         The returned object has attribute layers, which is the same as the input layers to this function.
     """
 
@@ -28,7 +28,7 @@ def build_policy_net(layers):
     """
     :param layers: a list of size 3
         with index 0, 1, 2 specifying the input size, hidden layer size and output size respectively.
-    :return: a torch.nn.Module which implements a FFN with 1 hidden layer and RELU non-linearity followed by softmax.
+    :return: a FFN with 1 hidden layer and RELU non-linearity followed by softmax.
         The returned object has attribute layers, which is the same as the input layers to this function.
     """
 
