@@ -125,7 +125,6 @@ def train(shared_policy_net, shared_policy_optim,
     value_net.load_state_dict(shared_value_net.state_dict())
 
     for episode_i in count():
-        policy_net.load_state_dict(shared_policy_net.state_dict())
         episode = run_episode(policy_net, env, args)
 
         if process_i == 0:
