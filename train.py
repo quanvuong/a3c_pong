@@ -68,7 +68,6 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
 
     :param episode: a list of EpisodeStep (specified in utils.py)
     :param args: an object which holds all hyperparam setting
-    :return:
     """
 
     # Compute baselines
