@@ -93,6 +93,7 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
     shared_policy_optim.zero_grad()
     # neg_perf = (log_act_probs * (baselines - returns)).sum() - args.entropy_weight * entropy
     neg_perf = - args.entropy_weight * entropy
+    neg_perf = neg_perf / len(episode)
     neg_perf.backward()
 
     # Turn NaNs to 0
