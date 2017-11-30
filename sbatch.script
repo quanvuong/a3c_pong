@@ -8,7 +8,7 @@
 #SBATCH --mail-type=END,FAIL,REQUEUE,STAGE_OUT
 #SBATCH --mail-user=qhv200@nyu.edu
 #SBATCH --partition=aquila
-#SBATCH --nodelist=agpu1
+#SBATCH --nodelist=aquila3
 
 source activate /gpfsnyu/scratch/qhv200/conda_envs/pytorch2_cpu_py36_oct_9
 cd /gpfsnyu/scratch/qhv200/a3c_pong
