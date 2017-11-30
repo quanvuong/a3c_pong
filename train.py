@@ -17,8 +17,8 @@ from wrappers import FloatTensorFromNumpyVar, FloatTensorVar, ZeroTensorVar
 from utils import run_episode, run_value_net
 
 
-def ensure_share_grads(global_net, local_net):
-    for param, shared_param in zip(local_net.parameters(), global_net.parameters()):
+def ensure_share_grads(shared_net, local_net):
+    for param, shared_param in zip(local_net.parameters(), shared_net.parameters()):
         if shared_param.grad is not None:
             return
         shared_param._grad = param.grad
