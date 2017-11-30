@@ -49,14 +49,19 @@ def build_policy_net(args):
             super(PolicyNet, self).__init__()
             layers = args.policy_net_layers
 
-            self.linear1 = torch.nn.Linear(layers[0], layers[1])
-            self.relu = torch.nn.ReLU()
-            self.linear2 = torch.nn.Linear(layers[1], layers[2])
-            self.sf = torch.nn.Softmax()
+            self.input_linear = nn.Linear(layers[0], layers[1])
+            self.output_linear = nn.Linear(layers[1], layers[2])
+            self.hid_linears = nn.ModuleList([nn.Linear(layers[1], layers[1])
+                                              for _ in range(args.pol_num_hid_layer)])
 
         def forward(self, state):
-            before_sf = self.linear2(self.relu(self.linear1(state)))
-            dist = self.sf(before_sf)
-            return dist
+            x = F.relu(self.input_linear(state))
+
+            for layer in self.hid_linears:
+                x = F.relu(layer(x))
+
+            x = self.output_linear(x)
+
+            return F.softmax(x)
 
     return PolicyNet(args)
