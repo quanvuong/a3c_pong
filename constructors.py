@@ -11,7 +11,7 @@ def build_value_net(args):
     """
     :param layers: a list of size 3
         with index 0, 1, 2 specifying the input size, hidden layer size and output size respectively.
-    :return: a FFN with 2 hidden layers and RELU non-linearity.
+    :return: a FFN with RELU non-linearity.
     """
 
     class ValueNet(nn.Module):
@@ -41,7 +41,7 @@ def build_policy_net(args):
     """
     :param layers: a list of size 3
         with index 0, 1, 2 specifying the input size, hidden layer size and output size respectively.
-    :return: a FFN with 1 hidden layer and RELU non-linearity followed by softmax.
+    :return: a FFN with RELU non-linearity followed by softmax.
     """
 
     class PolicyNet(torch.nn.Module):
