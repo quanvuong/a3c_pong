@@ -1,6 +1,6 @@
 # a3c to play pong
 
-The main file entry is `main.py`. The two main dependencies are Pytorch and OpenAI gym. Check out [environment.yml] for all dependencies and their version.
+The main file entry is `main.py`. The two main dependencies are Pytorch and OpenAI gym. Check out [environment.yml](https://github.com/quanvuong/a3c_pong/blob/master/environment.yml) for all dependencies and their version.
 
 Run the following commands to run the code (Tested on factory installation of macOS Sierra Version 10.12.6 MacBook Air 13-inch, Mid 2013):
 
