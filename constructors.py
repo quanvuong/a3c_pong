@@ -9,8 +9,7 @@ import torch.nn.functional as F
 
 def build_value_net(args):
     """
-    :param layers: a list of size 3
-        with index 0, 1, 2 specifying the input size, hidden layer size and output size respectively.
+    :param args: an object which holds all hyperparam setting
     :return: a FFN with RELU non-linearity.
     """
 
@@ -39,8 +38,7 @@ def build_value_net(args):
 
 def build_policy_net(args):
     """
-    :param layers: a list of size 3
-        with index 0, 1, 2 specifying the input size, hidden layer size and output size respectively.
+    :param args: an object which holds all hyperparam setting
     :return: a FFN with RELU non-linearity followed by softmax.
     """
 
