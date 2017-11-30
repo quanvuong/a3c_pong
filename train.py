@@ -118,10 +118,10 @@ def train(shared_policy_net, shared_policy_optim,
     env.seed(process_i)
 
     # create local policy and value net and sync params
-    policy_net = build_policy_net(shared_policy_net.layers)
+    policy_net = build_policy_net(args)
     policy_net.load_state_dict(shared_policy_net.state_dict())
 
-    value_net = build_value_net(args, shared_value_net.layers)
+    value_net = build_value_net(args)
     value_net.load_state_dict(shared_value_net.state_dict())
 
     for episode_i in count():

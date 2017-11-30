@@ -49,12 +49,8 @@ def main(args):
     :param args: an object which holds all hyperparam values
     """
 
-    # state size, hidden layer size, output size
-    policy_net_layers = [128, 256, 6]
-    value_net_layers = [128, 256, 1]
-
-    shared_policy_net = build_policy_net(policy_net_layers).share_memory()
-    shared_value_net = build_value_net(args, value_net_layers).share_memory()
+    shared_policy_net = build_policy_net(args).share_memory()
+    shared_value_net = build_value_net(args).share_memory()
 
     shared_policy_optim = SharedRMSProp(shared_policy_net.parameters(), lr=args.lr)
     shared_value_optim = SharedRMSProp(shared_value_net.parameters(), lr=args.lr)
@@ -81,6 +77,10 @@ if __name__ == '__main__':
 
     args.pol_num_hid_layer = 3
     args.val_net_num_hid_layer = 3
+
+    # state size, hidden layer size, output size
+    args.policy_net_layers = [128, 256, 6]
+    args.value_net_layers = [128, 256, 1]
 
     try:
         cpu_count = int(os.environ['SLURM_CPUS_PER_TASK'])

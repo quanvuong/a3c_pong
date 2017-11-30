@@ -7,7 +7,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-def build_value_net(args, layers):
+def build_value_net(args):
     """
     :param layers: a list of size 3
         with index 0, 1, 2 specifying the input size, hidden layer size and output size respectively.
@@ -16,8 +16,10 @@ def build_value_net(args, layers):
     """
 
     class ValueNet(nn.Module):
-        def __init__(self, args, layers):
+        def __init__(self, args):
             super().__init__()
+            layers = args.value_net_layers
+
             self.input_linear = nn.Linear(layers[0], layers[1])
             self.output_linear = nn.Linear(layers[1], layers[2])
             self.hid_linears = nn.ModuleList([nn.Linear(layers[1], layers[1])
@@ -34,10 +36,10 @@ def build_value_net(args, layers):
             output = self.output_linear(x)
             return output
 
-    return ValueNet(args, layers)
+    return ValueNet(args)
 
 
-def build_policy_net(layers):
+def build_policy_net(args):
     """
     :param layers: a list of size 3
         with index 0, 1, 2 specifying the input size, hidden layer size and output size respectively.
@@ -46,8 +48,10 @@ def build_policy_net(layers):
     """
 
     class PolicyNet(torch.nn.Module):
-        def __init__(self, layers):
+        def __init__(self, args):
             super(PolicyNet, self).__init__()
+            layers = args.policy_net_layers
+
             self.linear1 = torch.nn.Linear(layers[0], layers[1])
             self.relu = torch.nn.ReLU()
             self.linear2 = torch.nn.Linear(layers[1], layers[2])
@@ -59,4 +63,4 @@ def build_policy_net(layers):
             dist = self.sf(before_sf)
             return dist
 
-    return PolicyNet(layers)
+    return PolicyNet(args)
