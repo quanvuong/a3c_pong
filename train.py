@@ -85,7 +85,8 @@ def train_policy_net(policy_net, shared_policy_net, pol_optim, episode, value_ne
 
     # Call backward pass and update param
     pol_optim.zero_grad()
-    neg_perf = (log_act_probs * (baselines - returns)).sum()
+    # neg_perf = (log_act_probs * (baselines - returns)).sum()
+    neg_perf = - args.entropy_weight * entropy
     neg_perf.backward()
 
     # Turn NaNs to 0
