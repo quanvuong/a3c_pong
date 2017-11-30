@@ -74,7 +74,7 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
     baselines = [run_value_net(value_net, step.state) for step in episode]
     baselines = FloatTensorVar(baselines)
 
-    # Calculate sum of log probability of action and episode entropy
+    # Calculate log probability of action and episode entropy
     log_act_probs = ZeroTensorVar(len(episode))
     entropy = ZeroTensorVar(1)
     for idx, step in enumerate(episode):
@@ -82,6 +82,11 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
         entropy = entropy + step.entropy
 
     returns = FloatTensorVar([step.G for step in episode])
+
+    print(log_act_probs)
+    print(baselines)
+    print(returns)
+    sys.stdout.flush()
 
     # Call backward pass and update param
     shared_policy_optim.zero_grad()
