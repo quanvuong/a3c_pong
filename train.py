@@ -62,7 +62,7 @@ def train_value_net(value_net, shared_value_net, shared_value_optim, episode):
     shared_value_optim.step()
 
 
-def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode, value_net, args, process_i=-1):
+def train_policy_net(policy_net, shared_policy_net, pol_optim, episode, value_net, args, process_i=-1):
     """
     Update the policy net using policy gradient formulation with entropy bonus.
 
@@ -84,7 +84,7 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
     returns = FloatTensorVar([step.G for step in episode])
 
     # Call backward pass and update param
-    shared_policy_optim.zero_grad()
+    pol_optim.zero_grad()
     neg_perf = (log_act_probs * (baselines - returns)).sum()
     neg_perf.backward()
 
@@ -93,7 +93,7 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
         w.grad.data[w.grad.data != w.grad.data] = 0
 
     ensure_share_grads(shared_policy_net, policy_net)
-    shared_policy_optim.step()
+    pol_optim.step()
 
 
 def train(shared_policy_net, shared_policy_optim,
@@ -122,7 +122,6 @@ def train(shared_policy_net, shared_policy_optim,
     policy_net.load_state_dict(shared_policy_net.state_dict())
 
     pol_optim = torch.optim.RMSprop(policy_net.parameters(), lr=args.lr)
-    shared_policy_optim = pol_optim
 
     value_net = build_value_net(args)
     value_net.load_state_dict(shared_value_net.state_dict())
@@ -137,6 +136,6 @@ def train(shared_policy_net, shared_policy_optim,
         train_value_net(value_net, shared_value_net, shared_value_optim, episode)
         value_net.load_state_dict(shared_value_net.state_dict())
 
-        train_policy_net(policy_net, shared_policy_net, shared_policy_optim,
+        train_policy_net(policy_net, shared_policy_net, pol_optim,
                          episode, value_net, args, process_i=process_i)
         policy_net.load_state_dict(shared_policy_net.state_dict())
