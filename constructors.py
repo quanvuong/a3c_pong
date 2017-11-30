@@ -7,6 +7,11 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
+def init_uniform(network):
+    for w in network.parameters():
+        w.data.uniform_(-1, 1)
+
+
 def build_value_net(args):
     """
     :param args: an object which holds all hyperparam setting
@@ -33,7 +38,11 @@ def build_value_net(args):
             output = self.output_linear(x)
             return output
 
-    return ValueNet(args)
+    net = ValueNet(args)
+
+    init_uniform(net)
+
+    return net
 
 
 def build_policy_net(args):
@@ -62,4 +71,8 @@ def build_policy_net(args):
 
             return F.softmax(x)
 
-    return PolicyNet(args)
+    net = PolicyNet(args)
+
+    init_uniform(net)
+
+    return net
