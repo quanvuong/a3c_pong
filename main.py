@@ -71,12 +71,12 @@ if __name__ == '__main__':
     # gamma is discount rate used to calculate state value
     args.gamma = 0.99
 
-    args.pol_num_hid_layer = 3
-    args.val_net_num_hid_layer = 3
+    args.pol_num_hid_layer = 5
+    args.val_net_num_hid_layer = 5
 
     # state size, hidden layer size, output size
-    args.policy_net_layers = [128, 256, 6]
-    args.value_net_layers = [128, 256, 1]
+    args.policy_net_layers = [128, 1024, 6]
+    args.value_net_layers = [128, 1024, 1]
 
     try:
         cpu_count = int(os.environ['SLURM_CPUS_PER_TASK'])
