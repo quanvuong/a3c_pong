@@ -62,7 +62,7 @@ def train_value_net(value_net, shared_value_net, shared_value_optim, episode):
     shared_value_optim.step()
 
 
-def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode, value_net, args):
+def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode, value_net, args, process_i=-1):
     """
     Update the policy net using policy gradient formulation with entropy bonus.
 
@@ -83,10 +83,11 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
 
     returns = FloatTensorVar([step.G for step in episode])
 
-    print(log_act_probs)
-    print(baselines)
-    print(returns)
-    sys.stdout.flush()
+    if process_i == 0:
+        print(log_act_probs)
+        print(baselines)
+        print(returns)
+        sys.stdout.flush()
 
     # Call backward pass and update param
     shared_policy_optim.zero_grad()
@@ -139,5 +140,6 @@ def train(shared_policy_net, shared_policy_optim,
         train_value_net(value_net, shared_value_net, shared_value_optim, episode)
         value_net.load_state_dict(shared_value_net.state_dict())
 
-        train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode, value_net, args)
+        train_policy_net(policy_net, shared_policy_net, shared_policy_optim,
+                         episode, value_net, args, process_i=process_i)
         policy_net.load_state_dict(shared_policy_net.state_dict())
