@@ -98,7 +98,7 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
     for w in policy_net.parameters():
         w.grad.data[w.grad.data != w.grad.data] = 0
 
-    ensure_share_grads(shared_policy_net, policy_net)
+    # ensure_share_grads(shared_policy_net, policy_net)
     shared_policy_optim.step()
 
 
@@ -126,6 +126,9 @@ def train(shared_policy_net, shared_policy_optim,
     # create local policy and value net and sync params
     policy_net = build_policy_net(args)
     policy_net.load_state_dict(shared_policy_net.state_dict())
+
+    pol_optim = torch.optim.RMSprop(policy_net.parameters(), lr=args.lr)
+    shared_policy_optim = pol_optim
 
     value_net = build_value_net(args)
     value_net.load_state_dict(shared_value_net.state_dict())
