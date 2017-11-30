@@ -1,3 +1,7 @@
+"""
+Implement RMSProp with shared statistics among all the training processes
+"""
+
 import torch
 from torch.optim import RMSprop
 
@@ -36,15 +40,14 @@ class SharedRMSProp(RMSprop):
 
                 state = self.state[param]
 
-                # Incre step counter
                 state['step'] += 1
 
-                # Receive necessary info
+                # Retrieve necessary info
                 grad = param.grad.data
                 square_avg = state['square_avg']
                 alpha = group['alpha']
 
-                # Compute avg
+                # Compute avg of gradient
                 square_avg.mul_(alpha).addcmul_(1 - alpha, grad, grad)
                 avg = square_avg.sqrt().add_(group['eps'])
 

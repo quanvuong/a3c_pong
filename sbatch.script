@@ -2,13 +2,13 @@
 #SBATCH --job-name=a3c_pong
 #SBATCH --output=output.slurm
 
-#SBATCH --time=5:00:00
+#SBATCH --time=3:00:00
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=50000mb
 #SBATCH --mail-type=END,FAIL,REQUEUE,STAGE_OUT
 #SBATCH --mail-user=qhv200@nyu.edu
 #SBATCH --partition=aquila
-#SBATCH --nodelist=agpu1
+#SBATCH --nodelist=aquila3
 
 source activate /gpfsnyu/scratch/qhv200/conda_envs/pytorch2_cpu_py36_oct_9
 cd /gpfsnyu/scratch/qhv200/a3c_pong

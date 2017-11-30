@@ -1,3 +1,7 @@
+"""
+Wrappers for common pytorch tensors and variables.
+"""
+
 import torch
 from torch.autograd import Variable
 
@@ -9,9 +13,6 @@ ZeroTensorVar = lambda *tensor: Variable(ZeroTensor(*tensor))
 
 ByteTensor = lambda x: torch.ByteTensor(x)
 ByteTensorFromNumpy = lambda x: torch.from_numpy(x).byte()
-
-IntTensor = lambda x: torch.from_numpy(x).int()
-IntTensorVar = lambda x: Variable(IntTensor(x))
 
 
 def FloatTensorVar(x):
