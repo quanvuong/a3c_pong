@@ -33,6 +33,10 @@ def run_episode(policy_net, env, args):
         # Pick action
         state_torch = np_to_torch_state(state)
         act_dist = policy_net(state_torch)
+        print(act_dist)
+
+        import sys
+        sys.exit(0)
         act = torch.multinomial(act_dist.data, 1)[0, 0]
 
         # Calculate entropy bonus
