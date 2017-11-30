@@ -75,17 +75,17 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
     baselines = FloatTensorVar(baselines)
 
     # Calculate sum of log probability of action and episode entropy
-    sum_log_probs = ZeroTensorVar(len(episode))
+    log_act_probs = ZeroTensorVar(len(episode))
     entropy = ZeroTensorVar(1)
-    for step in episode:
-        sum_log_probs = sum_log_probs + step.act_prob
+    for idx, step in enumerate(episode):
+        log_act_probs[idx] = step.act_prob
         entropy = entropy + step.entropy
 
     returns = FloatTensorVar([step.G for step in episode])
 
     # Call backward pass and update param
     shared_policy_optim.zero_grad()
-    neg_perf = (sum_log_probs * (baselines - returns)).sum() - args.entropy_weight * entropy
+    neg_perf = (log_act_probs * (baselines - returns)).sum() - args.entropy_weight * entropy
     neg_perf.backward()
 
     # Turn NaNs to 0
