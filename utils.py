@@ -1,3 +1,5 @@
+import sys
+
 from wrappers import FloatTensorFromNumpyVar
 
 import numpy as np
@@ -15,7 +17,7 @@ def np_to_torch_state(state):
     return state
 
 
-def run_episode(policy_net, env, args):
+def run_episode(policy_net, env, args, process_i=-1):
     """
     Run the policy net in the environment for one episode.
     Calculate the discounted value of each state visited.
@@ -33,6 +35,9 @@ def run_episode(policy_net, env, args):
         # Pick action
         state_torch = np_to_torch_state(state)
         act_dist = policy_net(state_torch)
+        if process_i==0:
+            print(act_dist)
+            sys.stdout.flush()
         act = torch.multinomial(act_dist.data, 1)[0, 0]
 
         # Calculate entropy bonus
