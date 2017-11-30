@@ -1,6 +1,6 @@
 """
 Implements two main functions:
-    main: build the policy and value networks and start the a3c training process
+    main: build the policy and value networks and start the a3c training processes
     start_training_processes: start training processes and wait for them to finish
 """
 
