@@ -66,7 +66,7 @@ if __name__ == '__main__':
     # args holds all hyper param and game setting as attribute
     args = argparse.ArgumentParser()
     args.lr = 1e-4
-    args.entropy_weight = 0.1
+    args.entropy_weight = 10
     args.env_name = 'Pong-ram-v0'
 
     # SMALL is used in log(num + SMALL) in case num is 0 to prevent NaN
