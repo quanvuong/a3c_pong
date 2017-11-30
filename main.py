@@ -15,8 +15,7 @@ from train import train
 import torch.multiprocessing as mp
 
 
-def start_training_processes(args, shared_policy_net, shared_policy_optim,
-                             shared_value_net, shared_value_optim):
+def start_training_processes(args, shared_policy_net, shared_value_net):
     """
     :param args: an object which holds all hyperparam values
     """
@@ -24,8 +23,8 @@ def start_training_processes(args, shared_policy_net, shared_policy_optim,
     processes = []
 
     for process_i in range(args.cpu_count):
-        arguments = (shared_policy_net, shared_policy_optim,
-                     shared_value_net, shared_value_optim,
+        arguments = (shared_policy_net,
+                     shared_value_net,
                      process_i, args)
 
         p = mp.Process(target=train, args=arguments)
@@ -52,13 +51,10 @@ def main(args):
     shared_policy_net = build_policy_net(args).share_memory()
     shared_value_net = build_value_net(args).share_memory()
 
-    shared_policy_optim = SharedRMSProp(shared_policy_net.parameters(), lr=args.lr)
-    shared_value_optim = SharedRMSProp(shared_value_net.parameters(), lr=args.lr)
-
     start_training_processes(
         args,
-        shared_policy_net, shared_policy_optim,
-        shared_value_net, shared_value_optim
+        shared_policy_net,
+        shared_value_net,
     )
 
 
