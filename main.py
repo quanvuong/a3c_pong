@@ -54,7 +54,7 @@ def main(args):
     value_net_layers = [128, 256, 1]
 
     shared_policy_net = build_policy_net(policy_net_layers).share_memory()
-    shared_value_net = build_value_net(value_net_layers).share_memory()
+    shared_value_net = build_value_net(args, value_net_layers).share_memory()
 
     shared_policy_optim = SharedRMSProp(shared_policy_net.parameters(), lr=args.lr)
     shared_value_optim = SharedRMSProp(shared_value_net.parameters(), lr=args.lr)
@@ -78,6 +78,9 @@ if __name__ == '__main__':
 
     # gamma is discount rate used to calculate state value
     args.gamma = 0.99
+
+    args.pol_num_hid_layer = 3
+    args.val_net_num_hid_layer = 3
 
     try:
         cpu_count = int(os.environ['SLURM_CPUS_PER_TASK'])
