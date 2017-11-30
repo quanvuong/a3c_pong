@@ -83,11 +83,11 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
 
     returns = FloatTensorVar([step.G for step in episode])
 
-    if process_i == 0:
-        print(log_act_probs)
-        print(baselines)
-        print(returns)
-        sys.stdout.flush()
+    # if process_i == 0:
+    #     print(log_act_probs)
+    #     print(baselines)
+    #     print(returns)
+    #     sys.stdout.flush()
 
     # Call backward pass and update param
     shared_policy_optim.zero_grad()
