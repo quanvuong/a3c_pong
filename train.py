@@ -98,7 +98,7 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
     for w in policy_net.parameters():
         w.grad.data[w.grad.data != w.grad.data] = 0
 
-    # ensure_share_grads(shared_policy_net, policy_net)
+    ensure_share_grads(shared_policy_net, policy_net)
     shared_policy_optim.step()
 
 
