@@ -111,7 +111,7 @@ def train(shared_policy_net, shared_value_net, process_i, args):
     # Create env
     env = gym.make(args.env_name)
 
-    # Each training process is init with a different seeds
+    # Each training process is init with a different seed
     random.seed(process_i)
     np.random.seed(process_i)
     torch.manual_seed(process_i)
