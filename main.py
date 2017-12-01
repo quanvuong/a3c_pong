@@ -15,8 +15,7 @@ from train import train
 import torch.multiprocessing as mp
 
 
-def start_training_processes(args, shared_policy_net, shared_policy_optim,
-                             shared_value_net, shared_value_optim):
+def start_training_processes(args, shared_policy_net, shared_value_net):
     """
     :param args: an object which holds all hyperparam values
     """
@@ -24,8 +23,8 @@ def start_training_processes(args, shared_policy_net, shared_policy_optim,
     processes = []
 
     for process_i in range(args.cpu_count):
-        arguments = (shared_policy_net, shared_policy_optim,
-                     shared_value_net, shared_value_optim,
+        arguments = (shared_policy_net,
+                     shared_value_net,
                      process_i, args)
 
         p = mp.Process(target=train, args=arguments)
@@ -43,7 +42,7 @@ def start_training_processes(args, shared_policy_net, shared_policy_optim,
 
 def main(args):
     """
-    Build the policy and value network, whose parameters are moved to shared memory, and their optimizers.
+    Build the policy and value network, whose parameters are moved to shared memory.
     Start the a3c training processes.
 
     :param args: an object which holds all hyperparam values
@@ -52,13 +51,10 @@ def main(args):
     shared_policy_net = build_policy_net(args).share_memory()
     shared_value_net = build_value_net(args).share_memory()
 
-    shared_policy_optim = SharedRMSProp(shared_policy_net.parameters(), lr=args.lr)
-    shared_value_optim = SharedRMSProp(shared_value_net.parameters(), lr=args.lr)
-
     start_training_processes(
         args,
-        shared_policy_net, shared_policy_optim,
-        shared_value_net, shared_value_optim
+        shared_policy_net,
+        shared_value_net,
     )
 
 
@@ -66,7 +62,7 @@ if __name__ == '__main__':
     # args holds all hyper param and game setting as attribute
     args = argparse.ArgumentParser()
     args.lr = 1e-4
-    args.entropy_weight = 0.1
+    args.entropy_weight = 0.01
     args.env_name = 'Pong-ram-v0'
 
     # SMALL is used in log(num + SMALL) in case num is 0 to prevent NaN
@@ -75,12 +71,12 @@ if __name__ == '__main__':
     # gamma is discount rate used to calculate state value
     args.gamma = 0.99
 
-    args.pol_num_hid_layer = 3
-    args.val_net_num_hid_layer = 3
+    args.pol_num_hid_layer = 5
+    args.val_net_num_hid_layer = 5
 
     # state size, hidden layer size, output size
-    args.policy_net_layers = [128, 256, 6]
-    args.value_net_layers = [128, 256, 1]
+    args.policy_net_layers = [128, 1024, 6]
+    args.value_net_layers = [128, 1024, 1]
 
     try:
         cpu_count = int(os.environ['SLURM_CPUS_PER_TASK'])

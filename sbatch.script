@@ -2,7 +2,7 @@
 #SBATCH --job-name=a3c_pong
 #SBATCH --output=output.slurm
 
-#SBATCH --time=3:00:00
+#SBATCH --time=12:00:00
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=50000mb
 #SBATCH --mail-type=END,FAIL,REQUEUE,STAGE_OUT
