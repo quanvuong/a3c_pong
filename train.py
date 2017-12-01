@@ -10,6 +10,7 @@ import sys
 import numpy as np
 import torch
 import torch.nn.functional as F
+from torch.optim import RMSprop
 import gym
 
 from constructors import build_policy_net, build_value_net
@@ -24,7 +25,7 @@ def ensure_share_grads(shared_net, local_net):
         shared_param._grad = param.grad
 
 
-def train_value_net(value_net, shared_value_net, shared_value_optim, episode):
+def train_value_net(value_net, shared_value_net, val_optim, episode):
     """
     Update the value network using first visit Monte Carlo return
     to minimize the L1 loss between actual and predicted values of states visited during the epidode.
@@ -49,7 +50,7 @@ def train_value_net(value_net, shared_value_net, shared_value_optim, episode):
     returns = FloatTensorVar([returns])
 
     # Train the value network on states, returns
-    shared_value_optim.zero_grad()
+    val_optim.zero_grad()
 
     loss = F.l1_loss(value_net(states), returns)
     loss.backward()
@@ -59,10 +60,10 @@ def train_value_net(value_net, shared_value_net, shared_value_optim, episode):
         w.grad.data[w.grad.data != w.grad.data] = 0
 
     ensure_share_grads(shared_value_net, value_net)
-    shared_value_optim.step()
+    val_optim.step()
 
 
-def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode, value_net, args, process_i=-1):
+def train_policy_net(policy_net, shared_policy_net, pol_optim, episode, value_net, args, process_i=-1):
     """
     Update the policy net using policy gradient formulation with entropy bonus.
 
@@ -83,17 +84,9 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
 
     returns = FloatTensorVar([step.G for step in episode])
 
-    # if process_i == 0:
-    #     print(log_act_probs)
-    #     print(baselines)
-    #     print(returns)
-    #     sys.stdout.flush()
-
     # Call backward pass and update param
-    shared_policy_optim.zero_grad()
-    # neg_perf = (log_act_probs * (baselines - returns)).sum() - args.entropy_weight * entropy
-    neg_perf = - args.entropy_weight * entropy
-    neg_perf = neg_perf / len(episode)
+    pol_optim.zero_grad()
+    neg_perf = (log_act_probs * (baselines - returns)).sum() - args.entropy_weight * entropy
     neg_perf.backward()
 
     # Turn NaNs to 0
@@ -101,11 +94,10 @@ def train_policy_net(policy_net, shared_policy_net, shared_policy_optim, episode
         w.grad.data[w.grad.data != w.grad.data] = 0
 
     ensure_share_grads(shared_policy_net, policy_net)
-    shared_policy_optim.step()
+    pol_optim.step()
 
 
-def train(shared_policy_net, shared_policy_optim,
-          shared_value_net, shared_value_optim, process_i, args):
+def train(shared_policy_net, shared_value_net, process_i, args):
     """
     Seeds each training process based on its rank.
     Build local version of policy and value network.
@@ -129,8 +121,12 @@ def train(shared_policy_net, shared_policy_optim,
     policy_net = build_policy_net(args)
     policy_net.load_state_dict(shared_policy_net.state_dict())
 
+    pol_optim = RMSprop(policy_net.parameters(), lr=args.lr)
+
     value_net = build_value_net(args)
     value_net.load_state_dict(shared_value_net.state_dict())
+
+    val_optim = RMSprop(value_net.parameters(), lr=args.lr)
 
     for episode_i in count():
         episode = run_episode(policy_net, env, args, process_i=process_i)
@@ -139,9 +135,9 @@ def train(shared_policy_net, shared_policy_optim,
             print(f'process: {process_i}, episode: {episode_i}, episode length: {len(episode)}, G: {episode[0].G}')
             sys.stdout.flush()
 
-        train_value_net(value_net, shared_value_net, shared_value_optim, episode)
+        train_value_net(value_net, shared_value_net, val_optim, episode)
         value_net.load_state_dict(shared_value_net.state_dict())
 
-        train_policy_net(policy_net, shared_policy_net, shared_policy_optim,
+        train_policy_net(policy_net, shared_policy_net, pol_optim,
                          episode, value_net, args, process_i=process_i)
         policy_net.load_state_dict(shared_policy_net.state_dict())
