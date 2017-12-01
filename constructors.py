@@ -44,7 +44,7 @@ def build_policy_net(args):
 
     class PolicyNet(torch.nn.Module):
         def __init__(self, args):
-            super(PolicyNet, self).__init__()
+            super().__init__()
             layers = args.policy_net_layers
 
             self.input_linear = nn.Linear(layers[0], layers[1])
