@@ -42,7 +42,7 @@ def start_training_processes(args, shared_policy_net, shared_value_net):
 
 def main(args):
     """
-    Build the policy and value network, whose parameters are moved to shared memory, and their optimizers.
+    Build the policy and value network, whose parameters are moved to shared memory.
     Start the a3c training processes.
 
     :param args: an object which holds all hyperparam values
