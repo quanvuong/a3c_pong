@@ -7,15 +7,15 @@ import random
 from itertools import count
 import sys
 
+from constructors import build_policy_net, build_value_net
+from wrappers import FloatTensorFromNumpyVar, FloatTensorVar, ZeroTensorVar
+from utils import run_episode, run_value_net
+
 import numpy as np
 import torch
 import torch.nn.functional as F
 from torch.optim import RMSprop
 import gym
-
-from constructors import build_policy_net, build_value_net
-from wrappers import FloatTensorFromNumpyVar, FloatTensorVar, ZeroTensorVar
-from utils import run_episode, run_value_net
 
 
 def ensure_share_grads(shared_net, local_net):
